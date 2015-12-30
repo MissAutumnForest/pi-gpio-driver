@@ -20,13 +20,13 @@
 
 #define BLOCK_SIZE	(4*1024)
 
-int mem_fd;
-char *gpio_mem, *gpio_map;
-
-volatile unsigned *gpio;
-
 int main(int argc, char *argv[])
 {
+	int mem_fd;
+	char *gpio_map;
+	
+	volatile unsigned *gpio;
+
 	if((mem_fd = open("/dev/mem", O_RDWR|O_SYNC)) < 0)
 	{
 		printf("Failed to open /dev/mem, try checking permissions.\n");
