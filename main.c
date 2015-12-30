@@ -1,10 +1,5 @@
 #include <stdio.h>
-#include <fcntl.h>
- 
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-  
+#include <fcntl.h> 
 #include <unistd.h>
 
 #define PERI_BASE		0x3F000000 // Peripheral memory space
@@ -21,34 +16,9 @@
 #define BLOCK_SIZE	(4*1024)
 
 int main(int argc, char *argv[])
-{
-	int mem_fd;
-	char *gpio_map;
-	
-	volatile unsigned *gpio;
-
-	if((mem_fd = open("/dev/mem", O_RDWR|O_SYNC)) < 0)
-	{
-		printf("Failed to open /dev/mem, try checking permissions.\n");
-		return -1;
-	}
-	
-	gpio_map = mmap(
-		NULL,
-		BLOCK_SIZE,
-		PROT_READ | PROT_WRITE,
-		MAP_SHARED,
-		mem_fd,
-		GPIO_BASE
-	);
-
-	if (gpio_map == MAP_FAILED)
-	{
-		perror("Can't map memory!");
-		return -1;
-	}
-
-	gpio = (volatile unsigned *)gpio_map;
+{	
+	volatile unsigned* gpio;
+	gpio = (volatile unsigned*)map_memory(GPIO_BASE, BLOCK_SIZE);
 
 	OUT_GPIO(23);
 
