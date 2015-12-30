@@ -1,2 +1,2 @@
 default:
-	gcc main.c -o main
+	gcc map.c main.c -o main
