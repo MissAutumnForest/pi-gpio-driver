@@ -5,29 +5,24 @@
 #define PERI_BASE		0x3F000000 // Peripheral memory space
 #define GPIO_BASE		(PERI_BASE + 0x200000) // GPIO pins offset inside of the peripheral memory space
 
-#define INP_GPIO(g)		*(gpio + ((g)/10)) &= ~(7<<(((g)%10)*3)) // Set GPIO pin "g" to input mode
-#define OUT_GPIO(g)		*(gpio + ((g)/10)) |=  (1<<(((g)%10)*3)) // Set GPIO pin "g" to output mode
-#define SET_GPIO_ALT(g,a)	*(gpio + (((g)/10))) |= (((a)<=3?(a) + 4:(a)==4?3:2)<<(((g)%10)*3)) // Set GPIO pin "g" to alternate mode "a"
-#define GPIO_SET		*(gpio + 7) // Set the value of pin (sets if 1 ignores if 0) Format: 1 << "Pin #) EX: GPIO_SET = 1 << 23
-#define GPIO_CLR		*(gpio + 10) // Clears the value of pin (Sets if 1 ignores if 0) Format: 1 << "Pin #) EX: GPIO_CLR = 1 << 23
-#define GPIO_READ(g)		*(gpio + 13) &= (1<<(g)) // Reads the value of pin "g"
-
-
 #define BLOCK_SIZE	(4*1024)
 
 int main(int argc, char *argv[])
-{	
+{
+	int index = 0;
+	int size = argc - 1;
+
 	volatile unsigned* gpio;
 	gpio = (volatile unsigned*)map_memory(GPIO_BASE, BLOCK_SIZE);
 
-	OUT_GPIO(23);
+	set_mode(gpio, 23, 1);
 
 	while(1 == 1)
 	{
-		GPIO_SET = 1 << 23;
+		set_value(gpio, 23, 1);
 		sleep(1);
 		
-		GPIO_CLR = 1 << 23;
+		clear_pin(gpio, 23);
 		sleep(1);
 	}
 

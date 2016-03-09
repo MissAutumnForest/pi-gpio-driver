@@ -1,2 +1,2 @@
 default:
-	gcc map.c main.c -o main
+	gcc map.c functions.c main.c -o ./build/main
